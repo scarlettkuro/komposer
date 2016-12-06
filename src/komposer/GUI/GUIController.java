@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package komposer;
+package komposer.GUI;
 
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import java.net.URL;

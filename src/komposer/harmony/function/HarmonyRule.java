@@ -1,21 +1,11 @@
 package komposer.harmony.function;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import komposer.Accord;
 import komposer.Mode;
+import komposer.genetic.Chromosome;
+import komposer.genetic.FitnessFunction;
 import komposer.harmony.HarmonyChromosome;
 import komposer.harmony.function.rules.Rule64_1;
 import komposer.harmony.function.rules.Rule6_1;
@@ -44,7 +34,7 @@ import komposer.harmony.function.rules.RuleVoice8;
  *
  * @author kuro
  */
-public class HarmonyRule implements Comparator<HarmonyChromosome> {
+public class HarmonyRule /*implements Comparator<HarmonyChromosome>*/ implements FitnessFunction {
     
     Mode mode;
     
@@ -52,12 +42,27 @@ public class HarmonyRule implements Comparator<HarmonyChromosome> {
         mode = m;
     }
 
+
     @Override
-    public int compare(HarmonyChromosome ch1, HarmonyChromosome ch2) {
-        return Integer.compare (check(ch1.getAccords(mode)) , check(ch2.getAccords(mode)));
+    public int compare(Chromosome ch1, Chromosome ch2) {
+        return Integer.compare (
+                check(((HarmonyChromosome)ch1).getAccords(mode)) , 
+                check(((HarmonyChromosome)ch2).getAccords(mode))
+        );
+    }
+
+    @Override
+    public double check(Chromosome ch) {
+        return (double)checkInt((HarmonyChromosome)ch);
     }
     
-    public int check(HarmonyChromosome ch) {
+    /*
+    public int comparer(HarmonyChromosome ch1, HarmonyChromosome ch2) {
+        return Integer.compare (check(ch1.getAccords(mode)) , check(ch2.getAccords(mode)));
+    }
+    */
+    
+    public int checkInt(HarmonyChromosome ch) {
         return check(ch.getAccords(mode));
     }
     

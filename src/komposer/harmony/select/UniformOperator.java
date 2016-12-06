@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import static komposer.Utils.randomInt;
+import komposer.genetic.Chromosome;
+import komposer.genetic.FitnessFunction;
 import komposer.harmony.HarmonyChromosome;
 import komposer.harmony.function.HarmonyRule;
 
@@ -15,11 +17,12 @@ import komposer.harmony.function.HarmonyRule;
  */
 public class UniformOperator implements SelectOperator {
     
-    HarmonyRule rule;
+    FitnessFunction fitnessFunction;
     float threshold = 0;
-    
-    public void setRule(HarmonyRule r) {
-        rule = r;
+
+    @Override
+    public void setFitnessFunction(FitnessFunction ff) {
+        fitnessFunction = ff;
     }
     
     public void setThreshold(float t) {
@@ -32,14 +35,14 @@ public class UniformOperator implements SelectOperator {
     }
 
     @Override
-    public List<HarmonyChromosome> select(List<HarmonyChromosome> pool, int poolsize) {
+    public List<Chromosome> select(List<Chromosome> pool, int poolsize) {
         
         int thresh = makeThreshold(pool.size());
         
-        Collections.sort(pool, rule);
-        List<HarmonyChromosome> hpool = pool.subList(0, pool.size() - thresh);
+        Collections.sort(pool, fitnessFunction);
+        List<Chromosome> hpool = pool.subList(0, pool.size() - thresh);
         
-        List<HarmonyChromosome> newpool = new ArrayList<>();
+        List<Chromosome> newpool = new ArrayList<>();
         
         for (int i = 0; i < poolsize; i++) {
             newpool.add(selectOne(hpool));
@@ -49,7 +52,7 @@ public class UniformOperator implements SelectOperator {
         
     }
     
-    public HarmonyChromosome selectOne(List<HarmonyChromosome> hpool) {
+    public Chromosome selectOne(List<Chromosome> hpool) {
         return hpool.get(randomInt(hpool.size()));
         
     }

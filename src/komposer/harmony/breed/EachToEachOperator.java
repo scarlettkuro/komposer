@@ -8,6 +8,7 @@ package komposer.harmony.breed;
 import java.util.ArrayList;
 import java.util.List;
 import komposer.genetic.BreedOperator;
+import komposer.genetic.Chromosome;
 import komposer.genetic.CrossOperator;
 import komposer.harmony.HarmonyChromosome;
 
@@ -18,8 +19,8 @@ import komposer.harmony.HarmonyChromosome;
 public class EachToEachOperator implements BreedOperator {
 
     @Override
-    public List<HarmonyChromosome> breed(CrossOperator crossOperator, List<HarmonyChromosome> parents) {
-        List<HarmonyChromosome> children = new ArrayList<>();
+    public List<Chromosome> breed(CrossOperator crossOperator, List<Chromosome> parents) {
+        List<Chromosome> children = new ArrayList<>();
         int pool = parents.size();
         for(int j = 0; j < pool - 1; j++) {
             for(int i = j + 1; i < pool; i++) {

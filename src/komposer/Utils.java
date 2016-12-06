@@ -47,21 +47,21 @@ public class Utils {
         
     }
     
-    static public List<Double> buildInverseP(List<Integer> values) {
+    static public List<Double> buildInverseP(List<Double> values) {
         
-        int N = values.size();
-        int S = 0;
+        Double N = (double)values.size();
+        Double S = 0.0;
         
-        for (Integer v : values) {
+        for (Double v : values) {
             S += v;
         }
         
         List<Double> p = new ArrayList<>();
         
-        for (Integer v : values) {
-            p.add((double)(
-                (double)(S - v) / (double)(S*(N-1))
-            ));
+        for (Double v : values) {
+            p.add(
+                (S - v) / (S*(N-1))
+            );
         }
         
         return p;

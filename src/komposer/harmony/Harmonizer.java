@@ -13,6 +13,10 @@ import komposer.Accord;
 import komposer.Mode;
 import komposer.Playble;
 import static komposer.Utils.randomInt;
+import komposer.genetic.BreedOperator;
+import komposer.genetic.Genetic;
+import komposer.harmony.cross.MixupOperator;
+import komposer.harmony.mutation.SimpleAllelMutation;
 
 /**
  *
@@ -22,17 +26,11 @@ public class Harmonizer {
     
     private Mode mode;
     private int pool = 8; //amount of parents to take TAKES MOST OF TIME
-    int outsiders = 0;
-    //int size = 2; //size of genes chain
-    //int amount = 1; //amont of crossed genes in each cross
-    //int iterations = 2000;//pool * 30;
     int max_iterations = 200;
-    //float e = (float)0.3;
-    //int mut = 5;
-    HarmonyRule rule;
     SelectOperator selectOperator;
-    CrossOperator crossOperator;
-    MutationOperator mutationOperator;
+    MixupOperator crossOperator;
+    SimpleAllelMutation mutationOperator;
+    BreedOperator breedOperator;
         
     public Harmonizer(Mode mode) {
         this.mode = mode;
@@ -46,36 +44,16 @@ public class Harmonizer {
         max_iterations = mi;
     }
     
-    public void setRule(HarmonyRule r) {
-        rule = r;
-        selectOperator.setRule(rule);
-    }
-    
-    public void setSelectOperator(SelectOperator sOp) {
+    public void setH(int poolSize, int mut, int mount, int size, SelectOperator sOp) {
+        pool = poolSize;
+        mutationOperator = new SimpleAllelMutation();
+        mutationOperator.setMut(mut);
+        crossOperator = new MixupOperator();
+        crossOperator.setAmount(mount);
+        crossOperator.setSize(size);
         selectOperator = sOp;
-        selectOperator.setRule(rule);
-    }
-    
-    public void setCrossOperator(CrossOperator cOp) {
-        crossOperator = cOp;
-    }
-    
-    public void setMutationOperator(MutationOperator mOp) {
-        mutationOperator = mOp;
-    }
-    
-    public SelectOperator getSelectOperator() {
-        return selectOperator;
-    }
-    
-    public CrossOperator getCrossOperator() {
-        return crossOperator;
-    }
-    
-    public MutationOperator getMutationOperator() {
-        return mutationOperator;
-    }
-    
+        selectOperator.setFitnessFunction(new HarmonyRule());
+     }
     
     
     public Double sharmonize(List<Playble> melody) {
@@ -102,7 +80,6 @@ public class Harmonizer {
     }
     
     public List<HarmonyChromosome> buildAccordsM(List<Playble> melody) {
-        
         return buildAccords(Playble.getMelodyPitches(melody));
     }
     
@@ -116,43 +93,13 @@ public class Harmonizer {
         return chs;
     }
     
-    public List<HarmonyChromosome> selectOut(SelectOperator op, List<HarmonyChromosome> p) {
-        List<HarmonyChromosome> chsss = p.subList(p.size() - outsiders, p.size());
-        chsss.addAll(op.select(p, pool));
-        //unone
-        return chsss;
-        
-    }
-    
     public List<HarmonyChromosome> harmonizeAccords(List<HarmonyChromosome> generation, int N) {
-        int n = 0;
-        for (; n <  N ; n++) {
-            
-            List<HarmonyChromosome> parents = selectOperator.select(generation, pool);
+        Genetic genetic = new Genetic();
+        genetic.setBreedOperator(breedOperator);
+        genetic.setCrossOperator(crossOperator);
+        genetic.setMutationOperator(mutationOperator);
+        genetic.setSelectOperator(selectOperator);
         
-            List<HarmonyChromosome> children = new ArrayList<>();
-            
-            for(int j = 0; j < pool - 1; j++) {
-                for(int i = j + 1; i < pool; i++) {
-                    children.addAll(crossOperator.cross(parents.get(i), parents.get(j)));
-                }
-            }
-            
-            children = mutationOperator.mutate(children);
-            
-            generation = children;
-        }
-        
-        return generation;
-    }
-    
-    
-    //----------------------------
-    
-    public void printInfo(List<HarmonyChromosome> chs)  {
-        Collections.sort(chs, rule);
-        
-        System.out.println("Error function from " + rule.check(chs.get(0).getAccords(mode)) 
-                + " to " + rule.check(chs.get(chs.size()-1).getAccords(mode)));
+        return genetic.evolve(generation, N);
     }
 }

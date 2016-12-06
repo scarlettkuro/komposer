@@ -8,6 +8,8 @@ import java.util.List;
 import komposer.harmony.HarmonyChromosome;
 import komposer.harmony.function.HarmonyRule;
 import static komposer.Utils.randomInt;
+import komposer.genetic.Chromosome;
+import komposer.genetic.FitnessFunction;
 
 /**
  *
@@ -15,11 +17,12 @@ import static komposer.Utils.randomInt;
  */
 public class TournamentOperator implements SelectOperator {
     
-    HarmonyRule rule;
+    FitnessFunction fitnessFunction;
     int tour = 2;
     
-    public void setRule(HarmonyRule r) {
-        rule = r;
+    @Override
+    public void setFitnessFunction(FitnessFunction ff) {
+        fitnessFunction = ff;
     }
     
     public void setTour(int t) {
@@ -27,8 +30,8 @@ public class TournamentOperator implements SelectOperator {
     }
 
     @Override
-    public List<HarmonyChromosome> select(List<HarmonyChromosome> pool, int poolsize) {
-        List<HarmonyChromosome> newpool = new ArrayList<>();
+    public List<Chromosome> select(List<Chromosome> pool, int poolsize) {
+        List<Chromosome> newpool = new ArrayList<>();
         
         for (int i = 0; i < poolsize; i++) {
             newpool.add(selectOne(pool));
@@ -38,13 +41,13 @@ public class TournamentOperator implements SelectOperator {
         
     }
     
-    public HarmonyChromosome selectOne(List<HarmonyChromosome> pool) {
-        List<HarmonyChromosome> tourpool = new ArrayList<>();
+    public Chromosome selectOne(List<Chromosome> pool) {
+        List<Chromosome> tourpool = new ArrayList<>();
         for (int j = 0; j < tour; j++) {
             tourpool.add(pool.get(randomInt(pool.size())));
         }
 
-        return Collections.min(tourpool, rule);
+        return Collections.min(tourpool, fitnessFunction);
         
     }
     

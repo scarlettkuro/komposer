@@ -10,5 +10,5 @@ import komposer.harmony.function.HarmonyRule;
  */
 public interface SelectOperator {
     public List<Chromosome> select(List<Chromosome> generation, int poolsize);
-    public void setRule(HarmonyRule r);
+    public void setFitnessFunction(FitnessFunction ff);
 }
