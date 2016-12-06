@@ -1,13 +1,14 @@
 package komposer.harmony;
 
 import komposer.harmony.function.HarmonyRule;
-import komposer.harmony.mutation.MutationOperator;
-import komposer.harmony.select.SelectOperator;
-import komposer.harmony.cross.CrossOperator;
+import komposer.genetic.MutationOperator;
+import komposer.genetic.SelectOperator;
+import komposer.genetic.CrossOperator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import komposer.Accord;
 import komposer.Mode;
 import komposer.Playble;
@@ -47,11 +48,12 @@ public class Harmonizer {
     
     public void setRule(HarmonyRule r) {
         rule = r;
+        selectOperator.setRule(rule);
     }
     
     public void setSelectOperator(SelectOperator sOp) {
         selectOperator = sOp;
-        sOp.setRule(rule);
+        selectOperator.setRule(rule);
     }
     
     public void setCrossOperator(CrossOperator cOp) {
@@ -62,10 +64,22 @@ public class Harmonizer {
         mutationOperator = mOp;
     }
     
+    public SelectOperator getSelectOperator() {
+        return selectOperator;
+    }
+    
+    public CrossOperator getCrossOperator() {
+        return crossOperator;
+    }
+    
+    public MutationOperator getMutationOperator() {
+        return mutationOperator;
+    }
+    
     
     
     public Double sharmonize(List<Playble> melody) {
-        List<Chromosome> chs = buildAccordsM(melody);
+        List<HarmonyChromosome> chs = buildAccordsM(melody);
         double sMIN = rule.check(chs.get(0).getAccords(mode));
         chs = harmonizeAccords(chs, max_iterations);
         double smin = rule.check(chs.get(0).getAccords(mode));
@@ -74,7 +88,7 @@ public class Harmonizer {
     
     public List<Playble> harmonize(List<Playble> melody, int variation) {
         
-        List<Chromosome> chs = harmonizeAccords(buildAccordsM(melody), max_iterations);
+        List<HarmonyChromosome> chs = harmonizeAccords(buildAccordsM(melody), max_iterations);
         List<Accord> acs = chs.get(variation).getAccords(mode);
         List<Playble> msc = new ArrayList<>();
         for(Accord  a: acs) {
@@ -87,36 +101,36 @@ public class Harmonizer {
         return harmonize(melody, 0);
     }
     
-    public List<Chromosome> buildAccordsM(List<Playble> melody) {
+    public List<HarmonyChromosome> buildAccordsM(List<Playble> melody) {
         
         return buildAccords(Playble.getMelodyPitches(melody));
     }
     
-    public List<Chromosome> buildAccords(List<Integer> melody) {
-        List<Chromosome> chs = new ArrayList<>();
+    public List<HarmonyChromosome> buildAccords(List<Integer> melody) {
+        List<HarmonyChromosome> chs = new ArrayList<>();
 
         for(int i = 0; i < pool*pool; i++) {
-            chs.add(new Chromosome(melody));
+            chs.add(new HarmonyChromosome(melody));
         }
         
         return chs;
     }
     
-    public List<Chromosome> selectOut(SelectOperator op, List<Chromosome> p) {
-        List<Chromosome> chsss = p.subList(p.size() - outsiders, p.size());
+    public List<HarmonyChromosome> selectOut(SelectOperator op, List<HarmonyChromosome> p) {
+        List<HarmonyChromosome> chsss = p.subList(p.size() - outsiders, p.size());
         chsss.addAll(op.select(p, pool));
         //unone
         return chsss;
         
     }
     
-    public List<Chromosome> harmonizeAccords(List<Chromosome> generation, int N) {
+    public List<HarmonyChromosome> harmonizeAccords(List<HarmonyChromosome> generation, int N) {
         int n = 0;
         for (; n <  N ; n++) {
             
-            List<Chromosome> parents = selectOperator.select(generation, pool);
+            List<HarmonyChromosome> parents = selectOperator.select(generation, pool);
         
-            List<Chromosome> children = new ArrayList<>();
+            List<HarmonyChromosome> children = new ArrayList<>();
             
             for(int j = 0; j < pool - 1; j++) {
                 for(int i = j + 1; i < pool; i++) {
@@ -135,7 +149,7 @@ public class Harmonizer {
     
     //----------------------------
     
-    public void printInfo(List<Chromosome> chs) {
+    public void printInfo(List<HarmonyChromosome> chs)  {
         Collections.sort(chs, rule);
         
         System.out.println("Error function from " + rule.check(chs.get(0).getAccords(mode)) 

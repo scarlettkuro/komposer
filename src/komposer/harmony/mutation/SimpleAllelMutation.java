@@ -1,7 +1,8 @@
 package komposer.harmony.mutation;
 
+import komposer.genetic.MutationOperator;
 import java.util.List;
-import komposer.harmony.Chromosome;
+import komposer.harmony.HarmonyChromosome;
 import komposer.harmony.Gene;
 import static komposer.Utils.randomInt;
 
@@ -18,8 +19,8 @@ public class SimpleAllelMutation implements MutationOperator {
     }
 
     @Override
-    public List<Chromosome> mutate(List<Chromosome> pool) {
-        for (Chromosome chromosome : pool) {
+    public List<HarmonyChromosome> mutate(List<HarmonyChromosome> pool) {
+        for (HarmonyChromosome chromosome : pool) {
             if (randomInt(100) < mut) {
                 int gene_pos = randomInt(chromosome.getGenes().size());
                 Gene gene2 = new Gene(chromosome.getGene(gene_pos));

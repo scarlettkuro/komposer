@@ -2,10 +2,21 @@ package komposer.harmony.function;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import komposer.Accord;
 import komposer.Mode;
-import komposer.harmony.Chromosome;
+import komposer.harmony.HarmonyChromosome;
 import komposer.harmony.function.rules.Rule64_1;
 import komposer.harmony.function.rules.Rule6_1;
 import komposer.harmony.function.rules.Rule6_2;
@@ -33,7 +44,7 @@ import komposer.harmony.function.rules.RuleVoice8;
  *
  * @author kuro
  */
-public class HarmonyRule implements Comparator<Chromosome> {
+public class HarmonyRule implements Comparator<HarmonyChromosome> {
     
     Mode mode;
     
@@ -42,15 +53,29 @@ public class HarmonyRule implements Comparator<Chromosome> {
     }
 
     @Override
-    public int compare(Chromosome ch1, Chromosome ch2) {
+    public int compare(HarmonyChromosome ch1, HarmonyChromosome ch2) {
         return Integer.compare (check(ch1.getAccords(mode)) , check(ch2.getAccords(mode)));
     }
     
-    public int check(Chromosome ch) {
+    public int check(HarmonyChromosome ch) {
         return check(ch.getAccords(mode));
     }
     
-    public int check(List<Accord> accords) {
+    public static class RuleCallable implements Callable {
+        private Accord A1;
+        private Accord A2;
+        private RuleInterface rule;
+        public RuleCallable( RuleInterface r, Accord a1, Accord a2) {
+            A1 = a1;
+            A2 = a2;
+            rule = r;
+        }
+        public Integer call() {
+            return rule.check(A1, A2);
+        }
+    }
+    
+    public int check(List<Accord> accords)  {
         
         List<RuleInterface> rules = new ArrayList<>();
         
@@ -86,6 +111,28 @@ public class HarmonyRule implements Comparator<Chromosome> {
         int sum = 0;
         
         for(int i = 0; i< accords.size() - 1; i++) {
+            /*ExecutorService pool = Executors.newFixedThreadPool(2);
+            Map<Future<Integer>, RuleInterface> set = new HashMap();
+            for(RuleInterface rule : rules) {
+                set.put(pool.submit(new RuleCallable(rule, accords.get(i), accords.get(i+1))),rule);
+            }
+            
+            Set<RuleInterface> rejectedRules = new HashSet<>();
+            
+            for (Future<Integer> future : set.keySet()) {
+                try {
+                    sum += future.get();
+                } catch (InterruptedException ex) {
+                    rejectedRules.add(set.get(future));
+                } catch (ExecutionException ex) {
+                    rejectedRules.add(set.get(future));
+                }
+            }
+            
+            for(RuleInterface rule : rejectedRules) {
+                sum += rule.check(accords.get(i), accords.get(i+1));
+            }
+            */
             for(RuleInterface rule : rules) {
                 sum += rule.check(accords.get(i), accords.get(i+1));
             }

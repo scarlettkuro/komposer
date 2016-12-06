@@ -1,9 +1,10 @@
 
 package komposer.harmony.select;
 
+import komposer.genetic.SelectOperator;
 import java.util.Collections;
 import java.util.List;
-import komposer.harmony.Chromosome;
+import komposer.harmony.HarmonyChromosome;
 import komposer.harmony.function.HarmonyRule;
 
 /**
@@ -19,7 +20,7 @@ public class EliteOperator implements SelectOperator {
     }
 
     @Override
-    public List<Chromosome> select(List<Chromosome> pool, int poolsize) {
+    public List<HarmonyChromosome> select(List<HarmonyChromosome> pool, int poolsize) {
         
         Collections.sort(pool, rule);
 

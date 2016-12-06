@@ -1,9 +1,10 @@
 
 package komposer.harmony.select;
 
+import komposer.genetic.SelectOperator;
 import java.util.ArrayList;
 import java.util.List;
-import komposer.harmony.Chromosome;
+import komposer.harmony.HarmonyChromosome;
 import komposer.harmony.function.HarmonyRule;
 import static komposer.Utils.randomInt;
 import static komposer.Utils.buildInverseP;
@@ -22,8 +23,8 @@ public class RouleteOperator implements SelectOperator {
     }
 
     @Override
-    public List<Chromosome> select(List<Chromosome> pool, int poolsize) {
-        List<Chromosome> newpool = new ArrayList<>();
+    public List<HarmonyChromosome> select(List<HarmonyChromosome> pool, int poolsize) {
+        List<HarmonyChromosome> newpool = new ArrayList<>();
         
         List<Integer> values = new ArrayList<>();
         

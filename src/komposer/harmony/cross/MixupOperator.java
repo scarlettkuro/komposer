@@ -1,8 +1,9 @@
 package komposer.harmony.cross;
 
+import komposer.genetic.CrossOperator;
 import java.util.ArrayList;
 import java.util.List;
-import komposer.harmony.Chromosome;
+import komposer.harmony.HarmonyChromosome;
 import komposer.harmony.Gene;
 import static komposer.Utils.randomInt;
 
@@ -24,12 +25,12 @@ public class MixupOperator implements CrossOperator {
     }
 
     @Override
-    public List<Chromosome> cross(Chromosome ch1, Chromosome ch2) {
+    public List<HarmonyChromosome> cross(HarmonyChromosome ch1, HarmonyChromosome ch2) {
         
-        List<Chromosome> chs = new ArrayList<>();
+        List<HarmonyChromosome> chs = new ArrayList<>();
         
-        Chromosome ch1_new = new Chromosome(ch1);
-        Chromosome ch2_new = new Chromosome(ch2);
+        HarmonyChromosome ch1_new = new HarmonyChromosome(ch1);
+        HarmonyChromosome ch2_new = new HarmonyChromosome(ch2);
         
         for (int j = 0; j < amount; j++) {
             int genesCount = ch2.getGenes().size();

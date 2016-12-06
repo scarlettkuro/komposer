@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Dropbox/diploma/komposer/src/komposer/Komposer.java</file>
-            <file>file:/D:/Dropbox/diploma/komposer/src/komposer/harmony/select/RouleteOperator.java</file>
-            <file>file:/D:/Dropbox/diploma/komposer/src/komposer/harmony/select/TournamentOperator.java</file>
-            <file>file:/D:/Dropbox/diploma/komposer/src/komposer/harmony/select/RangeOperator.java</file>
-            <file>file:/D:/Dropbox/diploma/komposer/src/komposer/harmony/select/UniformOperator.java</file>
-            <file>file:/D:/Dropbox/diploma/komposer/src/komposer/Utils.java</file>
+            <file>file:/D:/Dropbox/diploma/komposer/src/main/java/com/kuro/komposer/common/GUI.java</file>
+            <file>file:/D:/Dropbox/diploma/komposer/src/main/java/com/kuro/komposer/common/AccordBuilder.java</file>
+            <file>file:/D:/Dropbox/diploma/komposer/src/main/java/com/kuro/komposer/common/Accord.java</file>
+            <file>file:/D:/Dropbox/diploma/komposer/src/main/java/komposer/harmony/function/HarmonyRule.java</file>
         </group>
     </open-files>
 </project-private>

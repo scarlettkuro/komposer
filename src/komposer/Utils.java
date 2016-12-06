@@ -6,9 +6,11 @@
 package komposer;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import komposer.harmony.Chromosome;
+import komposer.harmony.HarmonyChromosome;
 
 /**
  *
@@ -31,13 +33,14 @@ public class Utils {
         return r.nextBoolean();
     }
     
-    static public int pickRandom(List<Double> values) {
+    static public int pickRandom(Collection<Double> values) {
         
         double r = randomDouble();
         int i = -1;
-        while( r > 0 && (i+1) < values.size() ) {
+        Iterator<Double> vi = values.iterator();
+        while( r > 0 && /*(i+1) < values.size()*/ vi.hasNext() ) {
             i++;
-            r -= values.get(i);
+            r -= vi.next();
         }
         
         return i;
@@ -59,6 +62,28 @@ public class Utils {
             p.add((double)(
                 (double)(S - v) / (double)(S*(N-1))
             ));
+        }
+        
+        return p;
+        
+    }
+    
+    static public List<Double> ps(List<Double> values) {
+        
+        int N = values.size();
+        int S = 0;
+        
+        List<Double> p = new ArrayList<>();
+        
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (i == j) {
+                    continue;
+                }
+                double ph = (values.get(i) + values.get(j)) / (4*(N-1));
+                p.add(ph);
+                p.add(ph);
+            }
         }
         
         return p;

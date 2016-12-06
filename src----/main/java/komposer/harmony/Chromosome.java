@@ -7,9 +7,9 @@ package komposer.harmony;
 
 import java.util.ArrayList;
 import java.util.List;
-import komposer.Accord;
-import komposer.Mode;
-import static komposer.Utils.randomInt;
+import com.kuro.komposer.common.Accord;
+import com.kuro.komposer.common.Mode;
+import static com.kuro.komposer.common.Utils.randomInt;
 
 /**
  *
