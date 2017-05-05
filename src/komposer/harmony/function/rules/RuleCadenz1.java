@@ -6,6 +6,8 @@ import komposer.Accord;
 import komposer.Mode;
 import java.util.List;
 import komposer.AccordInterface;
+import komposer.WrongAccordException;
+import komposer.harmony.function.rules.mistakes.*;
 
 /**
  *
@@ -17,7 +19,12 @@ public class RuleCadenz1 extends Rule implements RuleInterface {
      II53 с D53 и K64 соединяется мелодически, с противоположным мелодическим 
      движением в крайних голосах. 
     */
-    public int check(AccordInterface c1, AccordInterface c2) {
+    public int check(AccordInterface c1, AccordInterface c2) throws
+        WrongAccordException,
+        SlightMistakeException,
+        PlainMistakeException,
+        BigMistakeException
+    {
         
         String cdz = c1.getFunc() + c2.getFunc();
         
@@ -27,7 +34,8 @@ public class RuleCadenz1 extends Rule implements RuleInterface {
         ) { 
             return Rule.OK;
         }
-        return Rule.structMistake;
+        //throw new Exception();
+        return 0;
         
         
     }

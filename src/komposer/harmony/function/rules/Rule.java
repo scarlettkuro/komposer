@@ -14,16 +14,18 @@ import komposer.Accord;
 import komposer.Mode;
 import komposer.AccordInterface;
 
+//class StructMistakeException extends Exception {};
+
 /**
  *
  * @author kuro
  */
 public class Rule {
     
-    public static final int structMistake = 16;
+    /*public static final int structMistake = 16;
     public static final int bigMistake = 4;
     public static final int plainMistake = 2;
-    public static final int slightMistake = 1;
+    public static final int slightMistake = 1;*/
     public static final int OK = 0;
     
     public static Map<Integer,Boolean> getDoubledDegrees(List<Integer> pitches, Mode mode) {

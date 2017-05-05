@@ -1,12 +1,12 @@
 package komposer.genetic;
 
 import java.util.List;
-import komposer.harmony.HarmonyChromosome;
 
 /**
  *
  * @author kuro
  */
-public interface BreedOperator {
-    public List<Chromosome> breed(CrossOperator cOp, List<Chromosome> parents);
+public interface BreedOperator<T> {
+    public List<T> breed(CrossOperator cOp, List<T> parents);
+    public int poolsize(List<T> gen);
 }

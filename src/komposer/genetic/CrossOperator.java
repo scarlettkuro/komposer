@@ -1,12 +1,11 @@
 package komposer.genetic;
 
 import java.util.List;
-import komposer.harmony.HarmonyChromosome;
 
 /**
  *
  * @author kuro
  */
-public interface CrossOperator {
-    public List<Chromosome> cross(Chromosome ch1, Chromosome ch2);
+public interface CrossOperator<T> {
+    public List<T> cross(T ch1, T ch2);
 }

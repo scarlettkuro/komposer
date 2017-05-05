@@ -15,6 +15,7 @@ import komposer.Playble;
 import static komposer.Utils.randomInt;
 import komposer.genetic.BreedOperator;
 import komposer.genetic.Genetic;
+import komposer.harmony.breed.EachToEachOperator;
 import komposer.harmony.cross.MixupOperator;
 import komposer.harmony.mutation.SimpleAllelMutation;
 
@@ -31,6 +32,11 @@ public class Harmonizer {
     MixupOperator crossOperator;
     SimpleAllelMutation mutationOperator;
     BreedOperator breedOperator;
+    HarmonyRule ff;
+    
+    public void setRule(HarmonyRule p) {
+        ff = p;
+    }
         
     public Harmonizer(Mode mode) {
         this.mode = mode;
@@ -52,16 +58,27 @@ public class Harmonizer {
         crossOperator.setAmount(mount);
         crossOperator.setSize(size);
         selectOperator = sOp;
-        selectOperator.setFitnessFunction(new HarmonyRule());
+        selectOperator.setFitnessFunction(ff);
+        breedOperator = new EachToEachOperator();
      }
     
     
     public Double sharmonize(List<Playble> melody) {
         List<HarmonyChromosome> chs = buildAccordsM(melody);
-        double sMIN = rule.check(chs.get(0).getAccords(mode));
+       // HarmonyRule ff = new HarmonyRule();
+        double sMIN = ff.check(chs.get(0).getAccords(mode));
         chs = harmonizeAccords(chs, max_iterations);
-        double smin = rule.check(chs.get(0).getAccords(mode));
+        double smin = ff.check(chs.get(0).getAccords(mode));
         return smin/sMIN;
+    }
+    
+    
+    public Double fharmonize(List<Playble> melody) {
+        List<HarmonyChromosome> chs = buildAccordsM(melody);
+       // HarmonyRule ff = new HarmonyRule();
+        //double sMIN = ff.check(chs.get(0).getAccords(mode));
+        chs = harmonizeAccords(chs, max_iterations);
+        return (double)ff.check(chs.get(0).getAccords(mode));
     }
     
     public List<Playble> harmonize(List<Playble> melody, int variation) {
@@ -94,7 +111,7 @@ public class Harmonizer {
     }
     
     public List<HarmonyChromosome> harmonizeAccords(List<HarmonyChromosome> generation, int N) {
-        Genetic genetic = new Genetic();
+        Genetic<HarmonyChromosome> genetic = new Genetic();
         genetic.setBreedOperator(breedOperator);
         genetic.setCrossOperator(crossOperator);
         genetic.setMutationOperator(mutationOperator);

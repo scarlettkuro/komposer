@@ -7,6 +7,8 @@ import komposer.Accord;
 import komposer.Mode;
 import java.util.Map;
 import komposer.AccordInterface;
+import komposer.WrongAccordException;
+import komposer.harmony.function.rules.mistakes.*;
 
 /**
  *
@@ -17,7 +19,12 @@ public class RuleII6_3 extends Rule implements RuleInterface {
     /*
      Употреблять перед D53, D7, K64 в мелодическом положении примы.
     */
-    public int check(AccordInterface prev, AccordInterface next) {
+    public int check(AccordInterface prev, AccordInterface next) throws
+        WrongAccordException,
+        SlightMistakeException,
+        PlainMistakeException,
+        BigMistakeException
+    {
         if (!prev.checkName("II6")) {
             return Rule.OK;
         }
@@ -25,7 +32,7 @@ public class RuleII6_3 extends Rule implements RuleInterface {
         if ((prev.getMelodyDegree() != prev.getPrima()) && 
             (next.checkName("D53") || next.checkName("D7") || next.checkName("K64")) 
         ) {
-            return Rule.plainMistake;
+            throw new PlainMistakeException();
         }
         
         return Rule.OK;

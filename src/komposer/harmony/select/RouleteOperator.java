@@ -9,25 +9,24 @@ import komposer.harmony.function.HarmonyRule;
 import static komposer.Utils.randomInt;
 import static komposer.Utils.buildInverseP;
 import static komposer.Utils.pickRandom;
-import komposer.genetic.Chromosome;
 import komposer.genetic.FitnessFunction;
 
 /**
  *
  * @author kuro
  */
-public class RouleteOperator implements SelectOperator {
+public class RouleteOperator implements SelectOperator<HarmonyChromosome> {
     
-    FitnessFunction fitnessFunction;
+    FitnessFunction<HarmonyChromosome> fitnessFunction;
     
     @Override
-    public void setFitnessFunction(FitnessFunction ff) {
+    public void setFitnessFunction(FitnessFunction<HarmonyChromosome> ff) {
         fitnessFunction = ff;
     }
 
     @Override
-    public List<Chromosome> select(List<Chromosome> pool, int poolsize) {
-        List<Chromosome> newpool = new ArrayList<>();
+    public List<HarmonyChromosome> select(List<HarmonyChromosome> pool, int poolsize) {
+        List<HarmonyChromosome> newpool = new ArrayList<>();
         
         List<Double> values = new ArrayList<>();
         

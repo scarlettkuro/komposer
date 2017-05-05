@@ -7,6 +7,8 @@ import komposer.Accord;
 import komposer.Mode;
 import java.util.Map;
 import komposer.AccordInterface;
+import komposer.WrongAccordException;
+import komposer.harmony.function.rules.mistakes.*;
 
 /**
  *
@@ -20,7 +22,12 @@ public class RuleVoice3 extends Rule  implements RuleInterface {
         II6; VI53, 
         T после VII7, II7).
     */
-    public int check(AccordInterface prev, AccordInterface next) {
+    public int check(AccordInterface prev, AccordInterface next) throws
+        WrongAccordException,
+        SlightMistakeException,
+        PlainMistakeException,
+        BigMistakeException
+    {
         
         //check prev - if it's II6; VI53, return 0
         if (next.checkName("II6") || next.checkName("VI53")) {
@@ -33,7 +40,7 @@ public class RuleVoice3 extends Rule  implements RuleInterface {
         //else:
         Map<Integer,Boolean> doubledDegrees = Rule.getDoubledDegrees(next.getPitches(), mode);
         if (doubledDegrees.get(next.getTertia())) {
-            return Rule.plainMistake;
+            throw new BigMistakeException();
         }
         
         return Rule.OK;

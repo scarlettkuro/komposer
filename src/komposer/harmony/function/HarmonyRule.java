@@ -2,9 +2,12 @@ package komposer.harmony.function;
 
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import komposer.Accord;
 import komposer.Mode;
-import komposer.genetic.Chromosome;
+import komposer.PauseException;
+import komposer.WrongAccordException;
 import komposer.genetic.FitnessFunction;
 import komposer.harmony.HarmonyChromosome;
 import komposer.harmony.function.rules.Rule64_1;
@@ -29,12 +32,13 @@ import komposer.harmony.function.rules.RuleVoice5;
 import komposer.harmony.function.rules.RuleVoice6;
 import komposer.harmony.function.rules.RuleVoice7;
 import komposer.harmony.function.rules.RuleVoice8;
+import komposer.harmony.function.rules.mistakes.*;
 
 /**
  *
  * @author kuro
  */
-public class HarmonyRule /*implements Comparator<HarmonyChromosome>*/ implements FitnessFunction {
+public class HarmonyRule /*implements Comparator<HarmonyChromosome>*/ implements FitnessFunction<HarmonyChromosome> {
     
     Mode mode;
     
@@ -42,7 +46,7 @@ public class HarmonyRule /*implements Comparator<HarmonyChromosome>*/ implements
         mode = m;
     }
 
-
+/*
     @Override
     public int compare(Chromosome ch1, Chromosome ch2) {
         return Integer.compare (
@@ -50,21 +54,21 @@ public class HarmonyRule /*implements Comparator<HarmonyChromosome>*/ implements
                 check(((HarmonyChromosome)ch2).getAccords(mode))
         );
     }
-
+*/
     @Override
-    public double check(Chromosome ch) {
-        return (double)checkInt((HarmonyChromosome)ch);
+    public double check(HarmonyChromosome ch) {
+        return check(ch);
+    }
+    
+    @Override
+    public int compare(HarmonyChromosome ch1, HarmonyChromosome ch2) {
+        return Double.compare (check(ch1.getAccords(mode)) , check(ch2.getAccords(mode)));
     }
     
     /*
-    public int comparer(HarmonyChromosome ch1, HarmonyChromosome ch2) {
-        return Integer.compare (check(ch1.getAccords(mode)) , check(ch2.getAccords(mode)));
-    }
-    */
-    
     public int checkInt(HarmonyChromosome ch) {
         return check(ch.getAccords(mode));
-    }
+    }*/
     
     public static class RuleCallable implements Callable {
         private Accord A1;
@@ -76,11 +80,24 @@ public class HarmonyRule /*implements Comparator<HarmonyChromosome>*/ implements
             rule = r;
         }
         public Integer call() {
-            return rule.check(A1, A2);
+            try {
+                rule.check(A1, A2);
+            } catch (WrongAccordException e) {
+                return 8;
+            } catch (SlightMistakeException e) {
+                return 1;
+            } catch (PlainMistakeException e) {
+                return 2;
+            } catch (BigMistakeException e) {
+                return 4; 
+            } catch (PauseException e) {
+                return 0;
+            }
+            return 0;
         }
     }
     
-    public int check(List<Accord> accords)  {
+    public double check(List<Accord> accords)  {
         
         List<RuleInterface> rules = new ArrayList<>();
         
@@ -139,18 +156,32 @@ public class HarmonyRule /*implements Comparator<HarmonyChromosome>*/ implements
             }
             */
             for(RuleInterface rule : rules) {
-                sum += rule.check(accords.get(i), accords.get(i+1));
+                try {
+                    rule.check(accords.get(i), accords.get(i+1));
+                } catch (WrongAccordException e) {
+                    sum += 8;
+                } catch (SlightMistakeException e) {
+                    sum += 1;
+                } catch (PlainMistakeException e) {
+                    sum += 2;
+                } catch (BigMistakeException e) {
+                    sum += 4; 
+                } catch (PauseException e) {
+                    
+                }
+        
+    
             }
         }
         
-        int center = (int) Math.floor(accords.size() / 2 );
+        //int center = (int) Math.floor(accords.size() / 2 );
         
-        RuleCadenz1 cRule = new RuleCadenz1();
-        cRule.setMode(mode);
-        sum += cRule.check(accords.get(center-1), accords.get(center));
-        sum += cRule.check(accords.get(accords.size()-2), accords.get(accords.size()-1));
+        //RuleCadenz1 cRule = new RuleCadenz1();
+        //cRule.setMode(mode);
+        //sum += cRule.check(accords.get(center-1), accords.get(center));
+        //sum += cRule.check(accords.get(accords.size()-2), accords.get(accords.size()-1));
         
-        return sum;
+        return (double)sum/((double)accords.size());
     }
     
 }

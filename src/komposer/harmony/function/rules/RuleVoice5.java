@@ -6,6 +6,9 @@ import komposer.Accord;
 import komposer.Mode;
 import java.util.List;
 import komposer.AccordInterface;
+import komposer.PauseException;
+import komposer.WrongAccordException;
+import komposer.harmony.function.rules.mistakes.*;
 
 /**
  *
@@ -13,11 +16,16 @@ import komposer.AccordInterface;
  */
 public class RuleVoice5 extends Rule  implements RuleInterface {
     
-    
     /*
      При скачке в мелодии необходимо одновременное противоположное движение в басу.
     */
-    public int check(AccordInterface prev, AccordInterface next) {
+    public int check(AccordInterface prev, AccordInterface next) throws
+        WrongAccordException,
+        PauseException,
+        SlightMistakeException,
+        PlainMistakeException,
+        BigMistakeException
+    {
         
         int dMelody = prev.getMelody() - next.getMelody();
         int dBase = prev.getBass() - next.getBass();
@@ -27,7 +35,7 @@ public class RuleVoice5 extends Rule  implements RuleInterface {
                 return Rule.OK;
             }
             
-            return Rule.bigMistake;
+            throw new BigMistakeException();
         }
         
         return Rule.OK;

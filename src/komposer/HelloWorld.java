@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import javax.sound.midi.InvalidMidiDataException;
-import static komposer.Komposer.setH;
 import komposer.harmony.Harmonizer;
 import komposer.harmony.function.HarmonyRule;
 import org.jfugue.midi.MidiFileManager;
@@ -32,7 +31,7 @@ public class HelloWorld {
        // Pattern pattern = MidiFileManager.loadPatternFromMidi(new File("D:\\Dropbox\\diploma\\Неназвана тека\\music (інша копія).mid"));
        // System.out.println(pattern);
 //        player.play(new ChordProgression(pattern.toString()));
-
+/*
 komposer.Player p = new komposer.Player();
         Mode mode = new Mode(Mode.naturalMajor,0);     
         Melodizer me = new Melodizer(mode);
@@ -46,14 +45,14 @@ komposer.Player p = new komposer.Player();
         HarmonyRule rule = new HarmonyRule();
         rule.setMode(mode);
         h.setRule(rule);
-
+*/
         /*
         List<Collection<Playble>> objs = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             objs.add(h.harmonize(me.makePeriod(4, 4, 2)));
             
         }
-        */
+        *//*
         List<String> objs = new ArrayList<>();
         objs.add("X");
         objs.add("e");
@@ -71,7 +70,7 @@ komposer.Player p = new komposer.Player();
         
         pp(m);
         
-        //p.play(p.buildSequence((List<Playble>)cnc(m.keySet().iterator().next())));
+        //p.play(p.buildSequence((List<Playble>)cnc(m.keySet().iterator().next())));*/
     }
     public static void pp(Map<List, Double> m)  {
         for (Map.Entry<List, Double> e : m.entrySet()) {

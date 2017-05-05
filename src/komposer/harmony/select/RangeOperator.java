@@ -10,24 +10,23 @@ import komposer.harmony.function.HarmonyRule;
 import static komposer.Utils.randomDouble;
 import static komposer.Utils.buildInverseP;
 import static komposer.Utils.pickRandom;
-import komposer.genetic.Chromosome;
 import komposer.genetic.FitnessFunction;
 
 /**
  *
  * @author kuro
  */
-public class RangeOperator implements SelectOperator {
+public class RangeOperator implements SelectOperator<HarmonyChromosome> {
     
-    FitnessFunction fitnessFunction;
+    FitnessFunction<HarmonyChromosome> fitnessFunction;
     
     @Override
-    public void setFitnessFunction(FitnessFunction ff) {
+    public void setFitnessFunction(FitnessFunction<HarmonyChromosome> ff) {
         fitnessFunction = ff;
     }
 
     @Override
-    public List<Chromosome> select(List<Chromosome> pool, int poolsize) {
+    public List<HarmonyChromosome> select(List<HarmonyChromosome> pool, int poolsize) {
         
         Collections.sort(pool, fitnessFunction);
         
@@ -41,7 +40,7 @@ public class RangeOperator implements SelectOperator {
             );
         }
         
-        List<Chromosome> newpool = new ArrayList<>();
+        List<HarmonyChromosome> newpool = new ArrayList<>();
         
         for (int i = 0; i < poolsize; i++) {
             int index = pickRandom(p);

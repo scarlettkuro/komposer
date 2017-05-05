@@ -21,6 +21,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.HBox;
+import komposer.Melodizer;
+import komposer.Mode;
+import komposer.Playble;
+import komposer.Player;
+import komposer.harmony.Harmonizer;
+import komposer.harmony.function.HarmonyRule;
+import komposer.harmony.select.EliteOperator;
 
 /**
  *
@@ -92,5 +99,27 @@ public class GUIController implements Initializable {
                 + " " + hand_size.getValue() + " "  
                 + "("  + hand_period_intro.getValue() + "," + hand_period_outro.getValue() + ")"
         );
+    }
+    
+    @FXML 
+    public void make_music_action (ActionEvent event) {
+        Player p = new Player();
+        Mode mode = new Mode(Mode.naturalMajor,0);     
+        Melodizer m = new Melodizer(mode);
+        
+        List<Playble> period = m.makePeriod(4, 4, 2);
+            
+        Harmonizer h = new Harmonizer(mode);
+        
+        h.setMaxIterations(200);
+        
+        HarmonyRule rule = new HarmonyRule();
+        rule.setMode(mode);
+        h.setRule(rule);
+        
+        EliteOperator eo = new EliteOperator();
+        h.setH(12, 35, 1, 3, eo);
+        
+        p.save(p.buildSequence(h.harmonize(period)),"music-" + System.currentTimeMillis() + ".mid");
     }
 }

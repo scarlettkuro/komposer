@@ -5,7 +5,6 @@
  */
 package komposer.harmony;
 
-import komposer.genetic.Chromosome;
 import java.util.ArrayList;
 import java.util.List;
 import komposer.Accord;
@@ -16,7 +15,7 @@ import static komposer.Utils.randomInt;
  *
  * @author kuro
  */
-public class HarmonyChromosome implements Chromosome{
+public class HarmonyChromosome {
     
     private List<Gene> genes;
     

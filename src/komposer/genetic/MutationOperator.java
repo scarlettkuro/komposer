@@ -1,12 +1,11 @@
 package komposer.genetic;
 
 import java.util.List;
-import komposer.harmony.HarmonyChromosome;
 
 /**
  *
  * @author kuro
  */
-public interface MutationOperator {
-    public List<Chromosome> mutate(List<Chromosome> pool);
+public interface MutationOperator<T> {
+    public List<T> mutate(List<T> pool);
 }

@@ -41,7 +41,7 @@ public class Komposer {
     /**
      * @param args the command line arguments
      */
-    public void main(String[] args) throws InterruptedException, ExecutionException, FileNotFoundException, IOException, ClassNotFoundException {
+    public /*static*/ void main(String[] args) throws InterruptedException, ExecutionException, FileNotFoundException, IOException, ClassNotFoundException {
         
         Player p = new Player();
         Mode mode = new Mode(Mode.naturalMajor,0);     
@@ -51,7 +51,7 @@ public class Komposer {
             
         Harmonizer h = new Harmonizer(mode);
         
-        h.setMaxIterations(500);
+        h.setMaxIterations(200);
         
         HarmonyRule rule = new HarmonyRule();
         rule.setMode(mode);
@@ -86,27 +86,27 @@ public class Komposer {
             serializ(means,"D:\\Dropbox\\diploma\\" +  entry.getKey() + "__.jav");
         }
         */
-        
-        int N = 200;
+        /*
+        int N = 100;
         
         List<List<Double>> means = new ArrayList<>();
         
         EliteOperator eo = new EliteOperator();
-        h = setH(h, 12, 35, 1, 3, eo);
+        h.setH(12, 35, 1, 3, eo);
         means.add(s_s(h,period, N));
         
         RangeOperator ro = new RangeOperator();
-        h = setH(h, 12, 35, 6, 1, ro);
+        h.setH(12, 35, 6, 1, ro);
         means.add(s_s(h,period, N));
         
         TournamentOperator to = new TournamentOperator();
         to.setTour(6);
-        h = setH(h, 12, 35, 7, 1, to);
+        h.setH(12, 35, 7, 1, to);
         means.add(s_s(h,period, N));
         
         UniformOperator uo = new UniformOperator();
         uo.setThreshold(0.65f);
-        h = setH(h, 12, 25, 6, 1, uo);
+        h.setH(12, 25, 6, 1, uo);
         means.add(s_s(h,period, N));
             
         List<SelectOperator> sOps = new ArrayList<>();
@@ -119,14 +119,14 @@ public class Komposer {
             legs.add("'" + sOp.getClass().getSimpleName() + "'");
         }
         p_p(means, legs, "total2");
-        serializ(means,"D:\\Dropbox\\diploma\\total2.jav");
-        
+        serializ(means,"total2.jav");
+        */
         
         /*
         int N = 100;
         
         UniformOperator uo = new UniformOperator();
-        h = setH(h, 12, 25, 6, 1, uo);
+        h.setH(12, 25, 6, 1, uo);
         List<List<Double>> means = new ArrayList<>();
         List<String> legs = new ArrayList<>();
         for (float i = 0.2f; i <= 0.8f; i+=0.15f) {
@@ -141,7 +141,7 @@ public class Komposer {
         /*
         int N = 100;
         TournamentOperator to = new TournamentOperator();
-        h = setH(h, 12, 35, 7, 1, to);
+        h.setH(12, 35, 7, 1, to);
         List<List<Double>> means = new ArrayList<>();
         List<String> legs = new ArrayList<>();
         for (int i = 2; i <= 10; i+=2) {
@@ -165,6 +165,11 @@ public class Komposer {
         
         //p.play(s1);
         //p.save(s1,"x");
+        /*
+        EliteOperator eo = new EliteOperator();
+        h.setH(12, 35, 1, 3, eo);
+        System.out.println(h.fharmonize(period));
+        */
         System.exit(0);
     }
     
@@ -179,7 +184,7 @@ public class Komposer {
     
     
     public static void p_p(List<List<Double>> means, List<String> legs, String name) throws FileNotFoundException {
-        PrintWriter out = new PrintWriter("D:\\Dropbox\\diploma\\" + name + ".txt");
+        PrintWriter out = new PrintWriter(/*"D:\\Dropbox\\diploma\\" +*/ name + ".txt");
         
         out.println(name + "_legend = " + Arrays.toString(legs.toArray()) + ";");
         for (int i = 0; i < means.size(); i++) {
@@ -229,26 +234,12 @@ public class Komposer {
         return mean;
     }
      
-    public static Harmonizer setH(Harmonizer h, int poolSize, int mut, int mount, int size, SelectOperator sOp) {
-        h.setPool(6);
-        SimpleAllelMutation mOp = new SimpleAllelMutation();
-        mOp.setMut(mut);
-        h.setMutationOperator(mOp);
-        MixupOperator cOp = new MixupOperator();
-        cOp.setAmount(mount);
-        cOp.setSize(size);
-        h.setCrossOperator(cOp);
-        
-        
-        h.setSelectOperator(sOp);
-        
-        return h;
-     }
+    
     
     public static List<List<Double>> sss(Harmonizer h, List<Playble> melody, SelectOperator sOp, String type, int[] values, int N) throws InterruptedException, ExecutionException {
         
         /* eult */
-        h = setH(h, 6, 5, 2, 2, sOp);
+        h.setH(6, 5, 2, 2, sOp);
         //h.setSelectOperator(sOp);
         
         List<List<Double>> means = new ArrayList<>();
@@ -259,13 +250,13 @@ public class Komposer {
                 h.setPool(v);
             }
             else if (type.equals("mutation")) {
-                setH(h, 6, v, 2, 2, sOp);
+                h.setH(6, v, 2, 2, sOp);
             }
             else if ( type.equals("amount")) {
-                setH(h, 6, 5, v, 2, sOp);
+                h.setH(6, 5, v, 2, sOp);
             }
             else if (type.equals("size")) {
-                setH(h, 6, 5, 2, v, sOp);
+                h.setH(6, 5, 2, v, sOp);
             }
             //clculte
             means.add(s_s(h, melody, N));
@@ -285,7 +276,7 @@ public class Komposer {
         }
     }
     
-    public static void printA(List<Accord> ps) {
+    public static void printA(List<Accord> ps) throws WrongAccordException {
             for(Accord p : ps) {
                 System.out.print(p.getAccordName() + "\t");
             }

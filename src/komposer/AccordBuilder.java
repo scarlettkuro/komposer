@@ -100,9 +100,9 @@ public class AccordBuilder {
     
     public List<Integer> generateDegrees(int alternative) {
         return generateDegrees(
-                getType(alternative), 
-                melodyDegree(), 
-                getAlterntiveOfType(alternative)
+            getType(alternative), 
+            melodyDegree(), 
+            getAlterntiveOfType(alternative)
         );
     }
     

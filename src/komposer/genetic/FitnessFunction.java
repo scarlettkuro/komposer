@@ -11,6 +11,6 @@ import java.util.Comparator;
  *
  * @author kuro
  */
-public interface FitnessFunction extends Comparator<Chromosome> {
-    public double check(Chromosome ch);
+public interface FitnessFunction<T> extends Comparator<T> {
+    public double check(T ch);
 }

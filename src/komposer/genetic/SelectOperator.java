@@ -1,14 +1,12 @@
 package komposer.genetic;
 
 import java.util.List;
-import komposer.harmony.HarmonyChromosome;
-import komposer.harmony.function.HarmonyRule;
 
 /**
  *
  * @author kuro
  */
-public interface SelectOperator {
-    public List<Chromosome> select(List<Chromosome> generation, int poolsize);
-    public void setFitnessFunction(FitnessFunction ff);
+public interface SelectOperator<T> {
+    public List<T> select(List<T> generation, int poolsize);
+    public void setFitnessFunction(FitnessFunction<T> ff);
 }
